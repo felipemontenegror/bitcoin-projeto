@@ -10,21 +10,21 @@ class MercadoBitcoin {
         }
     }
 
-ticker() {
-    return this.call('ticker')
-}
-
-async call(method) {
-
-    const config = {
-        headers: {
-            'Accept': 'application/json'
-
-        }
+    ticker() {
+        return this.call('ticker')
     }
 
+    async call(method) {
+
+        const config = {
+            headers: {
+                'Accept': 'application/json',
+
+            }
+        }
+
     try {
-        const response = await axios.get(ENDPOINT_API + this.config.CURRENCY + '/' + method)
+        const response = await axios.get(ENDPOINT_API + this.config.CURRENCY + '/' + method, config)
         return response.data
     }
     catch(error){
@@ -34,6 +34,6 @@ async call(method) {
     }
 }
 
-module.export = {
+module.exports = {
     MercadoBitcoin
 }
