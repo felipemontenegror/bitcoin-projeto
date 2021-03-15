@@ -1,0 +1,16 @@
+{
+  "name": "bitcoin-projeto",
+  "version": "1.0.0",
+  "description": "projeto bitcoin com node",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Felipe Montenegro",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv-safe": "^8.2.0",
+    "nodemon": "^2.0.7"
+  }
+}
