@@ -17,14 +17,20 @@ class MercadoBitcoinTrade {
         }
     }
 
+    getAccountInfo(){
+        return this.call('get_account_info', {}) // função para retornar o saldo em conta
+    }
+
     placeBuyOrder(qty, limit_price) {
         return this.call('place_buy_order', {    //Ordem de compra -> R$ p/ BTC
             coin_pair: `BRL${this.config.CURRENCY}`,
-            quantily: `${qty}`.substring(0, 10),   //no máximo 10 números, incluindo depois da vírgula (BTC fracionado)
+            quantity: `${qty}`.substring(0, 10),   //no máximo 10 números, incluindo depois da vírgula (BTC fracionado)
             limit_price: `${limit_price}`
         })
 
     }
+
+
         async call(method, parameters) {
 
             const now = new Date().getTime()
