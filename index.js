@@ -17,7 +17,8 @@ async function getQuantity(coin, price, isBuy){  //parametros moeda, preço, e s
     const balance = parseFloat(data.balance[coin].available.toFixed(5))  //balance é um array, pegar coin de reais
 
         if (isBuy && balance < 100)  //mínimo possível de compra é 100 reais
-            return close.log('saldo insuficiente para comprar')
+            return false
+            //return close.log('saldo insuficiente para comprar')
             console.log(`saldo disponível de ${coin}: ${balance}`)
 
     let qty = 0
@@ -30,20 +31,28 @@ async function getQuantity(coin, price, isBuy){  //parametros moeda, preço, e s
 setInterval (async () => {
     const response = await infoApi.ticker()
     console.log(response)
-        if(response.ticker.sell > 339000) //valor colido após consulta
+
+        if(response.ticker.sell > 343000) //valor colido após consulta
        return console.log('Está caro! Pore favor, aguardar!')
     //else
         //return console.log('Está barato!! Pode comprar!!')
 
         //lógica da ordem de compra
         try {
-            const qty = await getQuantity('BRL', response.ticker.sell, true) // tipo de moeda, menor preço do mercado, se é compra
+            const qty = await getQuantity('BRL', response.ticker.sell, true)  // tipo de moeda, menor preço do mercado, se é compra
+                if(!qty) return console.log('saldo insuficiente para comprar')
+                
             const data = await tradeApi.placeBuyOrder(qty, response.ticker.sell) 
             console.log(`ordem inserida no livro!`, data)
-            
+
+        
+        const buyPrice = parseFloat(response.ticker.sell)
+        const profitability = parseFloat(process.env.PROFITABILITY) //1.1
+        const data2 = await tradeApi.placeSellOrder(data.quantity, buyPrice * profitability) // vender tudo q tem de BTC a 10% mais q pagou (preço de compra * %)
+        console.log('ordem inserida no livro', data2)
         }catch (error){
             console.error(error)
-        } // Dessa forma, vai comprar 100 reais em Bitcoins, caso esteja desvalorizado.
+        } // Dessa forma, vai comprar 100 reais em Bitcoins, caso esteja desvalorizado e continuar a operação repetidamente.
 
 
 }, process.env.CRAWLER_INTERVAL ) //processo do node . ambiente . variável com valor de tempo de execução
